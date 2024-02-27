@@ -22,12 +22,15 @@ export default function AllBoardPage() {
           All Boards
         </h1>
         <div class="grid grid-cols gap-3 md:grid-cols-3 md:gap-8 lg:grid-cols-3 lg:gap-8">
-          {boards.length > 0 &&
+          {Array.isArray(boards) && boards.length > 0 ? (
             boards.map((board) => (
               <div class="rounded-lg bg-gray-200 p-3 m-3">
                 <BoardCard board={board} />
               </div>
-            ))}
+            ))
+          ) : (
+            <></>
+          )}
           <AddBoard />
         </div>
       </div>
