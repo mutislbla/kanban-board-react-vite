@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int      @id @default(autoincrement())
+  username      String  @unique
+  full_name     String
+  email         String  @unique
+  password      String
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @default(now())
+  board         Board[]
+}
+
+model Board {
+  id            Int           @id @default(autoincrement())
+  user          User          @relation(fields: [user_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  user_id       Int 
+  name          String  
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @default(now())
+  task          Task[]
+}
+
+model Task {
+  id            Int           @id @default(autoincrement())
+  board         Board         @relation(fields: [board_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  board_id      Int 
+  name          String        
+  priority      Priority      
+  status        Status        
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @default(now())
+}
+
+enum Priority {
+  Low
+  Medium
+  Urgent
+}
+enum Status {
+  to_do
+  in_progress
+  completed
+ }
+
